@@ -4,6 +4,8 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Welcome from "./Welcome";
 import NavBar from "./NavBar";
 import PostView from "./PostView";
+import { createContext } from "react";
+import { SupashipUserInfo, useSession } from "./use-session";
 
 const router = createBrowserRouter([
   {
@@ -38,11 +40,19 @@ function App() {
 
 export default App;
 
+export const UserContext = createContext<SupashipUserInfo>({
+  session: null,
+  profile: null,
+});
+
 function Layout() {
+  const supashipUserInfo = useSession();
   return (
     <>
-      <NavBar />
-      <Outlet />
+      <UserContext.Provider value={supashipUserInfo}>
+        <NavBar />
+        <Outlet />
+      </UserContext.Provider>
     </>
   );
 }
